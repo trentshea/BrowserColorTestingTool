@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="js/main.js"></script>
+    <title>Document</title>
+</head>
+
+<body id="body">
+    <div id="header" class="header">
+        Header Area
+    </div>
+
+    <div id="main">
+        <div id="content">
+            <div id="sticky" class="sticky">
+                Scroll and takeover the top with sticky.
+            </div>
+
+            <div class="head-meta-stuff">
+                Meta stuff.<br>
+                <label for="color">CSS Color:</label>
+                <input type="text" id="color" name="color">
+                <button onclick="addThemeColor()">add theme-color</button>
+                <button onclick="toggleViewportFitCover()">toggle viewport-fit=cover</button>
+
+
+            </div>
+
+            <div class="background-color">
+                Background colors.
+                <div class="buttonContainer">
+                    <div class="column">
+                        <button onclick="addClassAttribute('body','body-background')">Add body CSS</button>
+                        <button onclick="addClassAttribute('header','header-background')">Add header CSS</button>
+                        <button onclick="addClassAttribute('footer','footer-background')">Add footer CSS</button>
+                    </div>
+                    <div class="column">
+                        <button onclick="removeClassAttribute('body','body-background')">Remove body CSS</button>
+                        <button onclick="removeClassAttribute('header','header-background')">Remove header CSS</button>
+                        <button onclick="removeClassAttribute('footer','footer-background')">Remove footer CSS</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fixedItems">
+                Fixed positions.
+                <div class="buttonContainer">
+                    <div class="column">
+                        <button onclick="addClassAttribute('header','header-position')">fixed header</button>
+                        <button onclick="addClassAttribute('footer','footer-position')">fixed footer</button>
+                    </div>
+                    <div class="column">
+                        <button onclick="removeClassAttribute('header','header-position')">default header</button>
+                        <button onclick="removeClassAttribute('footer','footer-position')">default footer</button>
+                    </div>
+                </div>
+            </div>
+            <button onclick="addClassAttribute('main','main-overflow')">add overflow auto to main</button>
+            <button onclick="removeClassAttribute('main','main-overflow')">remove overflow auto from main</button>
+
+            <button onclick="toggleDiv('overflowBody')">Toggle Overflow div inside body</button>
+
+            <button onclick="toggleDiv('overflowMain')">Toggle Overflow div inside main</button>
+        </div>
+        <div id="overflowMain" style="display:none">
+            <br><br><br><br><br><br><br><br><br><br><br><br>
+            <br><br><br><br><br><br><br><br><br><br><br><br>
+            So cold.
+        </div>
+    </div>
+
+    <div id="overflowBody" style="display:none">
+        <br><br><br><br><br><br><br><br><br><br><br><br>
+        <br><br><br><br><br><br><br><br><br><br><br><br>
+        So cold.
+    </div>
+
+    <div id="footer" class="footer">
+        Footer AreaFooter AreaFooter AreaFooter AreaFooter AreaFooter AreaFooter Area
+    </div>
+</body>
+
+</html>
