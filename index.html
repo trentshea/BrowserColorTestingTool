@@ -6,83 +6,135 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/main.css">
-    <script src="js/main.js"></script>
-    <title>Document</title>
+    <script src="js/main.js" defer=""></script>
+    <title>BrowserColorTestingTool</title>
 </head>
 
 <body id="body">
-    <div id="header" class="header">
-        Header Area
-    </div>
+    <header id="header" class="header">
+        <div class="header-content">
+            <div>
+                BrowserColorTestingTool
+            </div>
+        </div>
+    </header>
 
     <div id="main">
-        <div id="content">
-            <div id="sticky" class="sticky">
-                Scroll and takeover the top with sticky.
-            </div>
+        <div class="information">
+            This is a tool to test how different browsers handle colors in different contexts. Use the controls below to
+            change the colors of different elements and see how they are reflected in head.
+        </div>
 
-            <div class="head-meta-stuff">
-                Meta stuff.<br>
-                <label for="color">CSS Color:</label>
-                <input type="text" id="color" name="color">
-                <button onclick="addThemeColor()">add theme-color</button>
-                <button onclick="toggleViewportFitCover()">toggle viewport-fit=cover</button>
+        <div id="sticky" class="sticky">
+            Scroll and takeover the top with sticky.
+        </div>
 
-
-            </div>
-
-            <div class="background-color">
-                Background colors.
-                <div class="buttonContainer">
-                    <div class="column">
-                        <button onclick="addClassAttribute('body','body-background')">Add body CSS</button>
-                        <button onclick="addClassAttribute('header','header-background')">Add header CSS</button>
-                        <button onclick="addClassAttribute('footer','footer-background')">Add footer CSS</button>
+        <div id="content" class="content">
+            <div class="column-container controls">
+                <div class="category">
+                    theme-color
+                    <div class="row-container">
+                        <input type="checkbox" id="checkbox-theme-color">
+                        <label for="color-theme-color">color:</label>
+                        <input type="color" id="color-theme-color" value="#0077ff" data-target-id="body"
+                            data-target-property="background">
                     </div>
-                    <div class="column">
-                        <button onclick="removeClassAttribute('body','body-background')">Remove body CSS</button>
-                        <button onclick="removeClassAttribute('header','header-background')">Remove header CSS</button>
-                        <button onclick="removeClassAttribute('footer','footer-background')">Remove footer CSS</button>
+                </div>
+
+                <div class="category">
+                    body
+                    <div class="row-container">
+                        <div class="row-container">
+                            <label for="checkbox-body-background">background:</label>
+                            <input type="checkbox" id="checkbox-body-background" data-target-id="body"
+                                data-target-property="background" data-target-value-id="color-body-background">
+                            <input type="color" id="color-body-background" value="#ffff99" data-target-id="body"
+                                data-target-property="background" disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category">
+                    header
+                    <div class="row-container">
+                        <label for="select-header-position">position:</label>
+                        <select id="select-header-position" data-target-id="header" data-target-property="position">
+                            <option value="static" selected>static
+                            </option>
+                            <option value="fixed">fixed</option>
+                        </select>
+                    </div>
+
+                    <div id="controls-header-top" class="row-container">
+                        <label for="range-header-top">top:</label>
+                        <input type="range" id="range-header-top" name="header" min="0" max="10" step="1" value="0" />
+                        =
+                        <output name="output-header-top" for="range-header-top">0</output>
+                    </div>
+
+                    <div class="row-container">
+                        <label for="checkbox-header-background">background:</label>
+                        <input type="checkbox" id="checkbox-header-background" data-target-id="header"
+                            data-target-property="background" data-target-value-id="color-header-background">
+                        <input type="color" id="color-header-background" value="#cc77cc" data-target-id="header"
+                            data-target-property="background" disabled>
+                    </div>
+                </div>
+
+                <div class="category">
+                    sticky
+                    <div class="row-container">
+                        <label for="checkbox-sticky-background">background:</label>
+                        <input type="checkbox" id="checkbox-sticky-background" data-target-id="sticky"
+                            data-target-property="background" data-target-value-id="color-sticky-background">
+                        <input type="color" id="color-sticky-background" value="#cc11cc" data-target-id="sticky"
+                            data-target-property="background" disabled>
+                    </div>
+                </div>
+
+                <div class="category">
+                    footer
+                    <div class="row-container">
+                        <label for="select-footer-position">position:</label>
+                        <select id="select-footer-position" data-target-id="footer" data-target-property="position">
+                            <option value="static" selected>static</option>
+                            <option value="fixed">fixed</option>
+                        </select>
+                    </div>
+
+                    <div id="controls-footer-bottom" class="row-container">
+                        <label for="range-footer-bottom">bottom:</label>
+                        <input type="range" id="range-footer-bottom" name="footer" min="0" max="10" step="1"
+                            value="0" />
+                        =
+                        <output name="output-footer-bottom" for="range-footer-bottom">0</output>
+                    </div>
+
+                    <div class="row-container">
+                        <label for="checkbox-footer-background">background:</label>
+                        <input type="checkbox" id="checkbox-footer-background" data-target-id="footer"
+                            data-target-property="background" data-target-value-id="color-footer-background">
+                        <input type="color" id="color-footer-background" value="#cc5500" data-target-id="footer"
+                            data-target-property="background" disabled>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="fixedItems">
-                Fixed positions.
-                <div class="buttonContainer">
-                    <div class="column">
-                        <button onclick="addClassAttribute('header','header-position')">fixed header</button>
-                        <button onclick="addClassAttribute('footer','footer-position')">fixed footer</button>
-                    </div>
-                    <div class="column">
-                        <button onclick="removeClassAttribute('header','header-position')">default header</button>
-                        <button onclick="removeClassAttribute('footer','footer-position')">default footer</button>
-                    </div>
+        <div class="column-container controls">
+            <div class="category">
+                &lt;head&gt;
+                <div class="row-container">
+                    <output id="output-head"></output>
                 </div>
+                &lt;/head&gt;
             </div>
-            <button onclick="addClassAttribute('main','main-overflow')">add overflow auto to main</button>
-            <button onclick="removeClassAttribute('main','main-overflow')">remove overflow auto from main</button>
-
-            <button onclick="toggleDiv('overflowBody')">Toggle Overflow div inside body</button>
-
-            <button onclick="toggleDiv('overflowMain')">Toggle Overflow div inside main</button>
-        </div>
-        <div id="overflowMain" style="display:none">
-            <br><br><br><br><br><br><br><br><br><br><br><br>
-            <br><br><br><br><br><br><br><br><br><br><br><br>
-            So cold.
         </div>
     </div>
 
-    <div id="overflowBody" style="display:none">
-        <br><br><br><br><br><br><br><br><br><br><br><br>
-        <br><br><br><br><br><br><br><br><br><br><br><br>
-        So cold.
-    </div>
-
-    <div id="footer" class="footer">
+    <footer id="footer" class="footer">
         Footer AreaFooter AreaFooter AreaFooter AreaFooter AreaFooter AreaFooter Area
-    </div>
+    </footer>
 </body>
 
 </html>
