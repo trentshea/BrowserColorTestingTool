@@ -47,11 +47,11 @@ const setInternalCSS = (id, property, value) => {
     const ruleset = classSelector + declarationBlock;
     const existingElement = document.getElementById(className);
     if (existingElement) {
-        existingElement.innerHTML = ruleset;
+        existingElement.textContent = ruleset;
     } else {
         const styleElement = document.createElement('style');
         styleElement.id = className;
-        styleElement.innerHTML = ruleset;
+        styleElement.textContent = ruleset;
         document.head.appendChild(styleElement);
     }
 };
