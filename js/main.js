@@ -40,18 +40,23 @@ observer.observe(document.head, {
     childList: true, subtree: true, attributes: true
 });
 
-const injectInternalCSS = (id, property, value) => {
+const setInternalCSS = (id, property, value) => {
     const className = id + "-" + property;
     const classSelector = "." + className;
     const declarationBlock = " { " + property + ": " + value + "; }";
     const ruleset = classSelector + declarationBlock;
-    const styleElement = document.createElement('style');
-    styleElement.id = className;
-    styleElement.innerHTML = ruleset;
-    document.head.appendChild(styleElement);
+    const existingElement = document.getElementById(className);
+    if (existingElement) {
+        existingElement.textContent = ruleset;
+    } else {
+        const styleElement = document.createElement('style');
+        styleElement.id = className;
+        styleElement.textContent = ruleset;
+        document.head.appendChild(styleElement);
+    }
 };
 
-const removeInjectedInternalCSS = (id, property) => {
+const removeInternalCSS = (id, property) => {
     const styleElement = document.getElementById(`${id}-${property}`);
     if (styleElement) {
         styleElement.remove();
@@ -83,8 +88,7 @@ const onHeaderTopChange = (event) => {
     const value = rangeInput.value + "px";
 
     if (document.getElementById('select-header-position').value === 'fixed') {
-        removeInjectedInternalCSS('header', 'top');
-        injectInternalCSS('header', 'top', value);
+        setInternalCSS('header', 'top', value);
     }
 
     const output = document.querySelector('output[name="output-header-top"]');
@@ -96,8 +100,7 @@ const onFooterBottomChange = (event) => {
     const rangeInput = event.target;
     const value = rangeInput.value + "px";
     if (document.getElementById('select-footer-position').value === 'fixed') {
-        removeInjectedInternalCSS('footer', 'bottom');
-        injectInternalCSS('footer', 'bottom', value);
+        setInternalCSS('footer', 'bottom', value);
     }
 
     const output = document.querySelector('output[name="output-footer-bottom"]');
@@ -108,8 +111,7 @@ document.getElementById('range-footer-bottom').addEventListener('input', onFoote
 const onBackgroundValueChange = (event) => {
     const colorInput = event.target;
     let id = ((colorInput.id).split("-"))[1];
-    removeInjectedInternalCSS(id, "background");
-    injectInternalCSS(id, "background", colorInput.value);
+    setInternalCSS(id, "background", colorInput.value);
 };
 
 const onPositionChange = (event) => {
@@ -125,21 +127,21 @@ const onPositionChange = (event) => {
                 case "header":
                     rangeInput = document.getElementById('range-header-top');
                     const topValue = rangeInput.value + "px";
-                    injectInternalCSS("body", "padding-top", '50px');
+                    setInternalCSS("body", "padding-top", '50px');
                     addClass('body', 'padding-top');
-                    injectInternalCSS(id, 'position', value);
+                    setInternalCSS(id, 'position', value);
                     addClass(id, 'position');
-                    injectInternalCSS(id, "top", topValue);
+                    setInternalCSS(id, "top", topValue);
                     addClass(id, 'top');
                     break;
                 case "footer":
                     rangeInput = document.getElementById('range-footer-bottom');
                     const bottomValue = rangeInput.value + "px";
-                    injectInternalCSS("body", "padding-bottom", '50px');
+                    setInternalCSS("body", "padding-bottom", '50px');
                     addClass('body', 'padding-bottom');
-                    injectInternalCSS(id, 'position', value);
+                    setInternalCSS(id, 'position', value);
                     addClass(id, 'position');
-                    injectInternalCSS(id, "bottom", bottomValue);
+                    setInternalCSS(id, "bottom", bottomValue);
                     addClass(id, 'bottom');
                     break;
                 default:
@@ -148,19 +150,19 @@ const onPositionChange = (event) => {
         case "static":
             switch (id) {
                 case "header":
-                    removeInjectedInternalCSS('body', 'padding-top');
+                    removeInternalCSS('body', 'padding-top');
                     removeClass('body', 'padding-top');
-                    removeInjectedInternalCSS(id, 'position');
+                    removeInternalCSS(id, 'position');
                     removeClass(id, 'position');
-                    removeInjectedInternalCSS(id, 'top');
+                    removeInternalCSS(id, 'top');
                     removeClass(id, 'top');
                     break;
                 case "footer":
-                    removeInjectedInternalCSS('body', 'padding-bottom');
+                    removeInternalCSS('body', 'padding-bottom');
                     removeClass('body', 'padding-bottom');
-                    removeInjectedInternalCSS(id, 'position');
+                    removeInternalCSS(id, 'position');
                     removeClass(id, 'position');
-                    removeInjectedInternalCSS(id, 'bottom');
+                    removeInternalCSS(id, 'bottom');
                     removeClass(id, 'bottom');
                     break;
                 default:
@@ -185,7 +187,7 @@ const onBackgroundModification = (event) => {
     else {
         removeClass(checkbox.dataset.targetId, checkbox.dataset.targetProperty);
         colorInput.removeEventListener('input', onBackgroundValueChange);
-        removeInjectedInternalCSS(checkbox.dataset.targetId, checkbox.dataset.targetProperty);
+        removeInternalCSS(checkbox.dataset.targetId, checkbox.dataset.targetProperty);
     }
 };
 document.getElementById('checkbox-body-background').addEventListener('change', onBackgroundModification);
