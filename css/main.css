@@ -51,15 +51,24 @@
     white-space: pre-wrap;
 }
 
+.range {
+    width: stretch;
+}
+
 .row-container {
     align-items: center;
     display: flex;
     flex-direction: row;
     gap: 0.5em;
+    line-height: 2.3em;
 }
 
 .sticky {
     height: 50px;
     position: sticky;
     top: 0;
+}
+
+.sticky-content {
+    padding: 1em;
 }
