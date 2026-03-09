@@ -52,6 +52,7 @@
 }
 
 .range {
+    width: -webkit-fill-available;
     width: stretch;
 }
 
