@@ -90,7 +90,7 @@ const onHeaderTopChange = (event) => {
     const output = document.querySelector('output[name="output-header-top"]');
     output.value = rangeInput.value;
 };
-document.getElementById('range-header-top').addEventListener('change', onHeaderTopChange);
+document.getElementById('range-header-top').addEventListener('input', onHeaderTopChange);
 
 const onFooterBottomChange = (event) => {
     const rangeInput = event.target;
@@ -103,7 +103,7 @@ const onFooterBottomChange = (event) => {
     const output = document.querySelector('output[name="output-footer-bottom"]');
     output.value = rangeInput.value;
 };
-document.getElementById('range-footer-bottom').addEventListener('change', onFooterBottomChange);
+document.getElementById('range-footer-bottom').addEventListener('input', onFooterBottomChange);
 
 const onBackgroundValueChange = (event) => {
     const colorInput = event.target;
@@ -179,13 +179,11 @@ const onBackgroundModification = (event) => {
 
     if (checkbox.checked) {
         addClass(checkbox.dataset.targetId, checkbox.dataset.targetProperty);
-        colorInput.disabled = false;
-        colorInput.addEventListener('change', onBackgroundValueChange);
-        colorInput.dispatchEvent(new Event('change'));
+        colorInput.addEventListener('input', onBackgroundValueChange);
+        colorInput.dispatchEvent(new Event('input'));
     }
     else {
         removeClass(checkbox.dataset.targetId, checkbox.dataset.targetProperty);
-        colorInput.disabled = true;
         colorInput.removeEventListener('change', onBackgroundValueChange);
         removeInjectedInternalCSS(checkbox.dataset.targetId, checkbox.dataset.targetProperty);
     }
@@ -194,3 +192,6 @@ document.getElementById('checkbox-body-background').addEventListener('change', o
 document.getElementById('checkbox-header-background').addEventListener('change', onBackgroundModification);
 document.getElementById('checkbox-sticky-background').addEventListener('change', onBackgroundModification);
 document.getElementById('checkbox-footer-background').addEventListener('change', onBackgroundModification);
+
+document.getElementById('checkbox-sticky-background').checked = true;
+document.getElementById('checkbox-sticky-background').dispatchEvent(new Event('change'));

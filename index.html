@@ -26,7 +26,9 @@
         </div>
 
         <div id="sticky" class="sticky">
-            Scroll and takeover the top with sticky.
+            <div class="sticky-content">
+                This is a sticky element.
+            </div>
         </div>
 
         <div id="content" class="content">
@@ -49,13 +51,21 @@
                             <input type="checkbox" id="checkbox-body-background" data-target-id="body"
                                 data-target-property="background" data-target-value-id="color-body-background">
                             <input type="color" id="color-body-background" value="#ffff99" data-target-id="body"
-                                data-target-property="background" disabled>
+                                data-target-property="background">
                         </div>
                     </div>
                 </div>
 
                 <div class="category">
                     header
+                    <div class="row-container">
+                        <label for="checkbox-header-background">background:</label>
+                        <input type="checkbox" id="checkbox-header-background" data-target-id="header"
+                            data-target-property="background" data-target-value-id="color-header-background">
+                        <input type="color" id="color-header-background" value="#cc77cc" data-target-id="header"
+                            data-target-property="background">
+                    </div>
+
                     <div class="row-container">
                         <label for="select-header-position">position:</label>
                         <select id="select-header-position" data-target-id="header" data-target-property="position">
@@ -67,17 +77,9 @@
 
                     <div id="controls-header-top" class="row-container">
                         <label for="range-header-top">top:</label>
-                        <input type="range" id="range-header-top" name="header" min="0" max="10" step="1" value="0" />
+                        <input type="range" id="range-header-top" class="range" min="-60" max="10" step="1" value="0" />
                         =
                         <output name="output-header-top" for="range-header-top">0</output>
-                    </div>
-
-                    <div class="row-container">
-                        <label for="checkbox-header-background">background:</label>
-                        <input type="checkbox" id="checkbox-header-background" data-target-id="header"
-                            data-target-property="background" data-target-value-id="color-header-background">
-                        <input type="color" id="color-header-background" value="#cc77cc" data-target-id="header"
-                            data-target-property="background" disabled>
                     </div>
                 </div>
 
@@ -88,12 +90,20 @@
                         <input type="checkbox" id="checkbox-sticky-background" data-target-id="sticky"
                             data-target-property="background" data-target-value-id="color-sticky-background">
                         <input type="color" id="color-sticky-background" value="#cc11cc" data-target-id="sticky"
-                            data-target-property="background" disabled>
+                            data-target-property="background">
                     </div>
                 </div>
 
                 <div class="category">
                     footer
+                    <div class="row-container">
+                        <label for="checkbox-footer-background">background:</label>
+                        <input type="checkbox" id="checkbox-footer-background" data-target-id="footer"
+                            data-target-property="background" data-target-value-id="color-footer-background">
+                        <input type="color" id="color-footer-background" value="#cc5500" data-target-id="footer"
+                            data-target-property="background">
+                    </div>
+
                     <div class="row-container">
                         <label for="select-footer-position">position:</label>
                         <select id="select-footer-position" data-target-id="footer" data-target-property="position">
@@ -104,18 +114,10 @@
 
                     <div id="controls-footer-bottom" class="row-container">
                         <label for="range-footer-bottom">bottom:</label>
-                        <input type="range" id="range-footer-bottom" name="footer" min="0" max="10" step="1"
+                        <input type="range" id="range-footer-bottom" class="range" min="-60" max="10" step="1"
                             value="0" />
                         =
                         <output name="output-footer-bottom" for="range-footer-bottom">0</output>
-                    </div>
-
-                    <div class="row-container">
-                        <label for="checkbox-footer-background">background:</label>
-                        <input type="checkbox" id="checkbox-footer-background" data-target-id="footer"
-                            data-target-property="background" data-target-value-id="color-footer-background">
-                        <input type="color" id="color-footer-background" value="#cc5500" data-target-id="footer"
-                            data-target-property="background" disabled>
                     </div>
                 </div>
             </div>
