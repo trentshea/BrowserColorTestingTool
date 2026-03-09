@@ -184,7 +184,7 @@ const onBackgroundModification = (event) => {
     }
     else {
         removeClass(checkbox.dataset.targetId, checkbox.dataset.targetProperty);
-        colorInput.removeEventListener('change', onBackgroundValueChange);
+        colorInput.removeEventListener('input', onBackgroundValueChange);
         removeInjectedInternalCSS(checkbox.dataset.targetId, checkbox.dataset.targetProperty);
     }
 };
