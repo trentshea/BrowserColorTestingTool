@@ -16,11 +16,11 @@ const onThemeColorChange = (event) => {
 const onThemeColorToggle = (event) => {
     if (event.target.checked) {
         const color = document.getElementById('color-theme-color');
-        color.addEventListener('change', onThemeColorChange);
-        color.dispatchEvent(new Event('change'));
+        color.addEventListener('input', onThemeColorChange);
+        color.dispatchEvent(new Event('input'));
     }
     else {
-        document.getElementById('color-theme-color').removeEventListener('change', onThemeColorChange);
+        document.getElementById('color-theme-color').removeEventListener('input', onThemeColorChange);
         let meta = document.querySelector('meta[name="theme-color"]');
         if (meta) meta.remove();
     }
