@@ -40,7 +40,7 @@ observer.observe(document.head, {
     childList: true, subtree: true, attributes: true
 });
 
-const setInternalCSS = (id, property, value) => {
+const upsertStyleRule = (id, property, value) => {
     const className = id + "-" + property;
     const classSelector = "." + className;
     const declarationBlock = " { " + property + ": " + value + "; }";
@@ -56,7 +56,7 @@ const setInternalCSS = (id, property, value) => {
     }
 };
 
-const removeInternalCSS = (id, property) => {
+const removeStyleRule = (id, property) => {
     const styleElement = document.getElementById(`${id}-${property}`);
     if (styleElement) {
         styleElement.remove();
@@ -83,13 +83,13 @@ const removePropertyClass = (id, property) => {
 };
 
 const applyPositionStyles = (id, prop, value, applyPropertyClass) => {
-    setInternalCSS(id, prop, value);
+    upsertStyleRule(id, prop, value);
     if (applyPropertyClass) addPropertyClass(id, prop);
 };
 
 const removePositionStyles = (id, props) => {
     props.forEach(prop => {
-        removeInternalCSS(id, prop);
+        removeStyleRule(id, prop);
         removePropertyClass(id, prop);
     });
 };
@@ -118,7 +118,7 @@ const onPositionOffsetChange = (event) => {
     // (relative/static positioning doesn't need offset values)
     if (select.value === 'fixed') {
         const value = rangeInput.value + offsetUnit;
-        setInternalCSS(targetId, targetProperty, value);
+        upsertStyleRule(targetId, targetProperty, value);
     }
 
     // Always update the displayed value in the output element
@@ -129,7 +129,7 @@ const onPositionOffsetChange = (event) => {
 const onBackgroundValueChange = (event) => {
     const colorInput = event.target;
     let id = ((colorInput.id).split("-"))[1];
-    setInternalCSS(id, "background", colorInput.value);
+    upsertStyleRule(id, "background", colorInput.value);
 };
 
 const onPositionChange = (event) => {
@@ -167,7 +167,7 @@ const onPositionChange = (event) => {
     }
 };
 
-const onBackgroundModification = (event) => {
+const onBackgroundToggle = (event) => {
     const checkbox = event.target;
     const colorInput = document.getElementById(checkbox.dataset.targetValueId);
 
@@ -179,7 +179,7 @@ const onBackgroundModification = (event) => {
     else {
         removePropertyClass(checkbox.dataset.targetId, checkbox.dataset.targetProperty);
         colorInput.removeEventListener('input', onBackgroundValueChange);
-        removeInternalCSS(checkbox.dataset.targetId, checkbox.dataset.targetProperty);
+        removeStyleRule(checkbox.dataset.targetId, checkbox.dataset.targetProperty);
     }
 };
 
@@ -192,7 +192,7 @@ const onBackgroundModification = (event) => {
         document.getElementById(id)?.addEventListener('change', onPositionChange));
 
     ['checkbox-body-background', 'checkbox-header-background', 'checkbox-sticky-background', 'checkbox-footer-background'].forEach(id =>
-        document.getElementById(id)?.addEventListener('change', onBackgroundModification));
+        document.getElementById(id)?.addEventListener('change', onBackgroundToggle));
 
     // Set initial state for the sticky checkbox
     const stickyCheckbox = document.getElementById('checkbox-sticky-background');
