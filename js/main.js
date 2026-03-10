@@ -125,8 +125,6 @@ const onPositionOffsetChange = (event) => {
     const output = document.querySelector(`output[name="output-${targetId}-${targetProperty}"]`);
     output.value = rangeInput.value;
 };
-document.getElementById('range-header-top').addEventListener('input', onPositionOffsetChange);
-document.getElementById('range-footer-bottom').addEventListener('input', onPositionOffsetChange);
 
 const onBackgroundValueChange = (event) => {
     const colorInput = event.target;
@@ -168,8 +166,6 @@ const onPositionChange = (event) => {
             break;
     }
 };
-document.getElementById('select-header-position').addEventListener('change', onPositionChange);
-document.getElementById('select-footer-position').addEventListener('change', onPositionChange);
 
 const onBackgroundModification = (event) => {
     const checkbox = event.target;
@@ -186,10 +182,22 @@ const onBackgroundModification = (event) => {
         removeInternalCSS(checkbox.dataset.targetId, checkbox.dataset.targetProperty);
     }
 };
-document.getElementById('checkbox-body-background').addEventListener('change', onBackgroundModification);
-document.getElementById('checkbox-header-background').addEventListener('change', onBackgroundModification);
-document.getElementById('checkbox-sticky-background').addEventListener('change', onBackgroundModification);
-document.getElementById('checkbox-footer-background').addEventListener('change', onBackgroundModification);
 
-document.getElementById('checkbox-sticky-background').checked = true;
-document.getElementById('checkbox-sticky-background').dispatchEvent(new Event('change'));
+// Wrap setup in an IIFE to avoid polluting the module scope
+(() => {
+    ['range-header-top', 'range-footer-bottom'].forEach(id =>
+        document.getElementById(id)?.addEventListener('input', onPositionOffsetChange));
+
+    ['select-header-position', 'select-footer-position'].forEach(id =>
+        document.getElementById(id)?.addEventListener('change', onPositionChange));
+
+    ['checkbox-body-background', 'checkbox-header-background', 'checkbox-sticky-background', 'checkbox-footer-background'].forEach(id =>
+        document.getElementById(id)?.addEventListener('change', onBackgroundModification));
+
+    // Set initial state for the sticky checkbox
+    const stickyCheckbox = document.getElementById('checkbox-sticky-background');
+    if (stickyCheckbox) {
+        stickyCheckbox.checked = true;
+        stickyCheckbox.dispatchEvent(new Event('change'));
+    }
+})();
