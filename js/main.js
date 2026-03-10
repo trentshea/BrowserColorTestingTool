@@ -63,7 +63,7 @@ const removeInternalCSS = (id, property) => {
     }
 };
 
-const addClass = (id, property) => {
+const addPropertyClass = (id, property) => {
     const element = document.getElementById(id);
     const className = id + "-" + property;
     if (element) {
@@ -71,7 +71,7 @@ const addClass = (id, property) => {
     }
 };
 
-const removeClass = (id, property) => {
+const removePropertyClass = (id, property) => {
     const element = document.getElementById(id);
     const className = id + "-" + property;
     if (element) {
@@ -82,31 +82,51 @@ const removeClass = (id, property) => {
     }
 };
 
+const applyPositionStyles = (id, prop, value, applyPropertyClass) => {
+    setInternalCSS(id, prop, value);
+    if (applyPropertyClass) addPropertyClass(id, prop);
+};
 
-const onHeaderTopChange = (event) => {
+const removePositionStyles = (id, props) => {
+    props.forEach(prop => {
+        removeInternalCSS(id, prop);
+        removePropertyClass(id, prop);
+    });
+};
+
+/**
+ * Handles changes to position offset range inputs.
+ * Updates the CSS property value and syncs the display output.
+ * 
+ * Expected data attributes on the range input:
+ * - data-target-id: ID of the element to apply styles to
+ * - data-target-property: CSS property to modify (e.g., "top", "bottom")
+ * - data-select-id: ID of the position type select element
+ * 
+ * Expected data attributes on the select element:
+ * - data-offset-unit: CSS unit to append to the value (e.g., "px", "%")
+ */
+const onPositionOffsetChange = (event) => {
     const rangeInput = event.target;
-    const value = rangeInput.value + "px";
+    const targetId = rangeInput.dataset.targetId;
+    const targetProperty = rangeInput.dataset.targetProperty;
+    const selectId = rangeInput.dataset.selectId;
+    const select = document.getElementById(selectId);
+    const offsetUnit = select.dataset.offsetUnit;
 
-    if (document.getElementById('select-header-position').value === 'fixed') {
-        setInternalCSS('header', 'top', value);
+    // Only apply CSS when position is set to "fixed"
+    // (relative/static positioning doesn't need offset values)
+    if (select.value === 'fixed') {
+        const value = rangeInput.value + offsetUnit;
+        setInternalCSS(targetId, targetProperty, value);
     }
 
-    const output = document.querySelector('output[name="output-header-top"]');
+    // Always update the displayed value in the output element
+    const output = document.querySelector(`output[name="output-${targetId}-${targetProperty}"]`);
     output.value = rangeInput.value;
 };
-document.getElementById('range-header-top').addEventListener('input', onHeaderTopChange);
-
-const onFooterBottomChange = (event) => {
-    const rangeInput = event.target;
-    const value = rangeInput.value + "px";
-    if (document.getElementById('select-footer-position').value === 'fixed') {
-        setInternalCSS('footer', 'bottom', value);
-    }
-
-    const output = document.querySelector('output[name="output-footer-bottom"]');
-    output.value = rangeInput.value;
-};
-document.getElementById('range-footer-bottom').addEventListener('input', onFooterBottomChange);
+document.getElementById('range-header-top').addEventListener('input', onPositionOffsetChange);
+document.getElementById('range-footer-bottom').addEventListener('input', onPositionOffsetChange);
 
 const onBackgroundValueChange = (event) => {
     const colorInput = event.target;
@@ -116,60 +136,36 @@ const onBackgroundValueChange = (event) => {
 
 const onPositionChange = (event) => {
     const select = event.target;
-    const id = select.dataset.targetId;//header or footer
-    const property = select.dataset.targetProperty;//position
-    const value = select.value;//fixed or static
-    let rangeInput;
+    const id = select.dataset.targetId;
+    const value = select.value;
+
+    // Read configuration from the select element's data attributes
+    const rangeId = select.dataset.rangeId;
+    const bodyPaddingProp = select.dataset.bodyPaddingProp;
+    const offsetProp = select.dataset.offsetProp;
+    const offsetUnit = select.dataset.offsetUnit;
+    const bodyPadding = select.dataset.bodyPadding;
+
+    // Validate that all required attributes exist
+    if (!rangeId || !bodyPaddingProp || !offsetProp || !offsetUnit) {
+        console.warn('Missing required data attributes on select element');
+        return;
+    }
 
     switch (value) {
-        case "fixed":
-            switch (id) {
-                case "header":
-                    rangeInput = document.getElementById('range-header-top');
-                    const topValue = rangeInput.value + "px";
-                    setInternalCSS("body", "padding-top", '50px');
-                    addClass('body', 'padding-top');
-                    setInternalCSS(id, 'position', value);
-                    addClass(id, 'position');
-                    setInternalCSS(id, "top", topValue);
-                    addClass(id, 'top');
-                    break;
-                case "footer":
-                    rangeInput = document.getElementById('range-footer-bottom');
-                    const bottomValue = rangeInput.value + "px";
-                    setInternalCSS("body", "padding-bottom", '50px');
-                    addClass('body', 'padding-bottom');
-                    setInternalCSS(id, 'position', value);
-                    addClass(id, 'position');
-                    setInternalCSS(id, "bottom", bottomValue);
-                    addClass(id, 'bottom');
-                    break;
-                default:
-            }
+        case 'fixed': {
+            const rangeInput = document.getElementById(rangeId);
+            const offsetValue = rangeInput.value + offsetUnit;
+
+            applyPositionStyles('body', bodyPaddingProp, bodyPadding, true);
+            applyPositionStyles(id, 'position', value, true);
+            applyPositionStyles(id, offsetProp, offsetValue, true);
             break;
-        case "static":
-            switch (id) {
-                case "header":
-                    removeInternalCSS('body', 'padding-top');
-                    removeClass('body', 'padding-top');
-                    removeInternalCSS(id, 'position');
-                    removeClass(id, 'position');
-                    removeInternalCSS(id, 'top');
-                    removeClass(id, 'top');
-                    break;
-                case "footer":
-                    removeInternalCSS('body', 'padding-bottom');
-                    removeClass('body', 'padding-bottom');
-                    removeInternalCSS(id, 'position');
-                    removeClass(id, 'position');
-                    removeInternalCSS(id, 'bottom');
-                    removeClass(id, 'bottom');
-                    break;
-                default:
-                    break;
-            }
+        }
+        case 'static':
+            removePositionStyles('body', [bodyPaddingProp]);
+            removePositionStyles(id, ['position', offsetProp]);
             break;
-        default:
     }
 };
 document.getElementById('select-header-position').addEventListener('change', onPositionChange);
@@ -180,12 +176,12 @@ const onBackgroundModification = (event) => {
     const colorInput = document.getElementById(checkbox.dataset.targetValueId);
 
     if (checkbox.checked) {
-        addClass(checkbox.dataset.targetId, checkbox.dataset.targetProperty);
+        addPropertyClass(checkbox.dataset.targetId, checkbox.dataset.targetProperty);
         colorInput.addEventListener('input', onBackgroundValueChange);
         colorInput.dispatchEvent(new Event('input'));
     }
     else {
-        removeClass(checkbox.dataset.targetId, checkbox.dataset.targetProperty);
+        removePropertyClass(checkbox.dataset.targetId, checkbox.dataset.targetProperty);
         colorInput.removeEventListener('input', onBackgroundValueChange);
         removeInternalCSS(checkbox.dataset.targetId, checkbox.dataset.targetProperty);
     }

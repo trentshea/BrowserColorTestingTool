@@ -68,7 +68,9 @@
 
                     <div class="row-container">
                         <label for="select-header-position">position:</label>
-                        <select id="select-header-position" data-target-id="header" data-target-property="position">
+                        <select id="select-header-position" data-target-id="header" data-target-property="position"
+                            data-range-id="range-header-top" data-body-padding-prop="padding-top" data-offset-prop="top"
+                            data-body-padding="50px" data-offset-unit="px">
                             <option value="static" selected>static
                             </option>
                             <option value="fixed">fixed</option>
@@ -77,7 +79,9 @@
 
                     <div id="controls-header-top" class="row-container">
                         <label for="range-header-top">top:</label>
-                        <input type="range" id="range-header-top" class="range" min="-60" max="10" step="1" value="0" />
+                        <input type="range" id="range-header-top" class="range" min="-60" max="10" step="1" value="0"
+                            data-target-id="header" data-target-property="top"
+                            data-select-id="select-header-position" />
                         =
                         <output name="output-header-top" for="range-header-top">0</output>
                     </div>
@@ -106,7 +110,9 @@
 
                     <div class="row-container">
                         <label for="select-footer-position">position:</label>
-                        <select id="select-footer-position" data-target-id="footer" data-target-property="position">
+                        <select id="select-footer-position" data-target-id="footer" data-target-property="position"
+                            data-range-id="range-footer-bottom" data-body-padding-prop="padding-bottom"
+                            data-offset-prop="bottom" data-body-padding="50px" data-offset-unit="px">
                             <option value="static" selected>static</option>
                             <option value="fixed">fixed</option>
                         </select>
@@ -114,8 +120,9 @@
 
                     <div id="controls-footer-bottom" class="row-container">
                         <label for="range-footer-bottom">bottom:</label>
-                        <input type="range" id="range-footer-bottom" class="range" min="-60" max="10" step="1"
-                            value="0" />
+                        <input type="range" id="range-footer-bottom" class="range" min="-60" max="10" step="1" value="0"
+                            data-target-id="footer" data-target-property="bottom"
+                            data-select-id="select-footer-position" />
                         =
                         <output name="output-footer-bottom" for="range-footer-bottom">0</output>
                     </div>
