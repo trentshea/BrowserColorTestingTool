@@ -33,18 +33,59 @@
 
         <div id="content" class="content">
             <div class="column-container controls">
-                <div class="category">
-                    theme-color
-                    <div class="row-container">
-                        <input type="checkbox" id="checkbox-theme-color">
-                        <label for="color-theme-color">color:</label>
-                        <input type="color" id="color-theme-color" value="#0077ff" data-target-id="body"
-                            data-target-property="background">
+                <div class="column-container">
+                    <div class="category" id="category-meta">
+                        <div class="row-container category-title">
+                            meta
+                            <div class="row-container">
+                                <input type="checkbox" id="checkbox-center-meta">
+                                <label for="checkbox-center-meta">center</label>
+                            </div>
+                        </div>
+
+                        <div class="column-container" style="margin-top: 0.5em">
+                            <div class="category" id="category-theme-color">
+                                <div class="row-container category-subtitle">
+                                    theme-color
+                                </div>
+                                <div class="row-container">
+                                    <input type="checkbox" id="checkbox-theme-color">
+                                    <label for="color-theme-color">color:</label>
+                                    <input type="color" id="color-theme-color" value="#0077ff" data-target-id="body"
+                                        data-target-property="background">
+                                </div>
+                            </div>
+
+                            <div class="category" id="category-viewport">
+                                <div class="row-container category-subtitle">
+                                    viewport
+                                </div>
+                                <div class="row-container">
+                                    <label for="select-viewport-fit">viewport-fit:</label>
+                                    <select id="select-viewport-fit">
+                                        <option value="auto" selected>auto</option>
+                                        <option value="contain">contain</option>
+                                        <option value="cover">cover</option>
+                                    </select>
+                                </div>
+                                <div class="row-container">
+                                    <label for="output-viewport-size">size:</label>
+                                    <output id="output-viewport-size"></output>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="category">
-                    body
+
+                <div class="category" id="category-body">
+                    <div class="row-container category-title">
+                        body
+                        <div class="row-container">
+                            <input type="checkbox" id="checkbox-center-body">
+                            <label for="checkbox-center-body">center</label>
+                        </div>
+                    </div>
                     <div class="row-container">
                         <div class="row-container">
                             <label for="checkbox-body-background">background:</label>
@@ -56,8 +97,14 @@
                     </div>
                 </div>
 
-                <div class="category">
-                    header
+                <div class="category" id="category-header">
+                    <div class="row-container category-title">
+                        header
+                        <div class="row-container">
+                            <input type="checkbox" id="checkbox-center-header">
+                            <label for="checkbox-center-header">center</label>
+                        </div>
+                    </div>
                     <div class="row-container">
                         <label for="checkbox-header-background">background:</label>
                         <input type="checkbox" id="checkbox-header-background" data-target-id="header"
@@ -87,8 +134,18 @@
                     </div>
                 </div>
 
-                <div class="category">
-                    sticky
+                <div class="category" id="category-sticky">
+                    <div class="row-container category-title">
+                        sticky
+                        <div class="row-container">
+                            <input type="checkbox" id="checkbox-center-sticky">
+                            <label for="checkbox-center-sticky">center</label>
+                        </div>
+                    </div>
+                    <div class="row-container">
+                        <input type="checkbox" id="checkbox-sticky-visibility" checked>
+                        <label for="checkbox-sticky-visibility">visible:</label>
+                    </div>
                     <div class="row-container">
                         <label for="checkbox-sticky-background">background:</label>
                         <input type="checkbox" id="checkbox-sticky-background" data-target-id="sticky"
@@ -98,8 +155,14 @@
                     </div>
                 </div>
 
-                <div class="category">
-                    footer
+                <div class="category" id="category-footer">
+                    <div class="row-container category-title">
+                        footer
+                        <div class="row-container">
+                            <input type="checkbox" id="checkbox-center-footer">
+                            <label for="checkbox-center-footer">center</label>
+                        </div>
+                    </div>
                     <div class="row-container">
                         <label for="checkbox-footer-background">background:</label>
                         <input type="checkbox" id="checkbox-footer-background" data-target-id="footer"

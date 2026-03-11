@@ -27,15 +27,45 @@ const onThemeColorToggle = (event) => {
 }
 document.getElementById('checkbox-theme-color').addEventListener('change', onThemeColorToggle);
 
-const onHeadChange = () => {
+const onViewportFitChange = (event) => {
+    let viewportMeta = document.querySelector('meta[name="viewport"]');
+    const selectedValue = event.target.value;
+
+    // Get existing parts, or an empty array if the meta tag doesn't exist.
+    let parts = viewportMeta ? viewportMeta.getAttribute('content').split(',').map(p => p.trim()) : [];
+
+    // Filter out any existing viewport-fit properties.
+    parts = parts.filter(p => !p.startsWith('viewport-fit=') && p.length > 0);
+
+    // Add the new viewport-fit value if it's not 'auto'.
+    if (selectedValue !== 'auto') {
+        parts.push(`viewport-fit=${selectedValue}`);
+    }
+
+    if (parts.length > 0) {
+        if (!viewportMeta) {
+            viewportMeta = document.createElement('meta');
+            viewportMeta.name = 'viewport';
+            document.head.appendChild(viewportMeta);
+        }
+        viewportMeta.setAttribute('content', parts.join(', '));
+    } else {
+        // If there are no parts, remove the meta tag if it exists.
+        if (viewportMeta) {
+            viewportMeta.remove();
+        }
+    }
+};
+
+const updateHeadOutput = () => {
     const output = document.getElementById("output-head");
     let outputValues = [];
     document.head.querySelectorAll('*').forEach(el => outputValues.push('  ' + el.outerHTML));
     output.value = outputValues.join('\n');
 };
 
-document.addEventListener('DOMContentLoaded', onHeadChange);
-const observer = new MutationObserver(onHeadChange);
+document.addEventListener('DOMContentLoaded', updateHeadOutput);
+const observer = new MutationObserver(updateHeadOutput);
 observer.observe(document.head, {
     childList: true, subtree: true, attributes: true
 });
@@ -132,7 +162,7 @@ const onBackgroundValueChange = (event) => {
     upsertStyleRule(id, "background", colorInput.value);
 };
 
-const onPositionChange = (event) => {
+const handlePositionTypeChange = (event) => {
     const select = event.target;
     const id = select.dataset.targetId;
     const value = select.value;
@@ -183,16 +213,93 @@ const onBackgroundToggle = (event) => {
     }
 };
 
+const onStickyToggle = (event) => {
+    const checkbox = event.target;
+    const stickyElement = document.getElementById('sticky');
+    if (checkbox.checked) {
+        stickyElement.classList.remove('hidden');
+    } else {
+        stickyElement.classList.add('hidden');
+    }
+};
+
+const onCenterToggle = (event) => {
+    const checkbox = event.target;
+    const centerCheckboxes = ['checkbox-center-meta', 'checkbox-center-body', 'checkbox-center-header', 'checkbox-center-sticky', 'checkbox-center-footer'];
+
+    const applyCentering = (category) => {
+        category.style.position = 'fixed';
+        category.style.top = '50%';
+        category.style.left = '50%';
+        category.style.transform = 'translate(-50%, -50%)';
+        category.style.zIndex = '1000';
+        category.style.backgroundColor = 'white';
+        category.style.border = '1px solid black';
+        category.style.padding = '10px';
+        category.style.width = '80%';
+    };
+
+    const removeCentering = (category) => {
+        category.style.position = '';
+        category.style.top = '';
+        category.style.left = '';
+        category.style.transform = '';
+        category.style.zIndex = '';
+        category.style.backgroundColor = '';
+        category.style.border = '';
+        category.style.padding = '';
+        category.style.width = '';
+        if (category.style.cssText.trim() === '') {
+            category.removeAttribute('style');
+        }
+    };
+
+    if (checkbox.checked) {
+        // Uncheck all others and remove their centering
+        centerCheckboxes.forEach(id => {
+            if (id !== checkbox.id) {
+                const otherCheckbox = document.getElementById(id);
+                if (otherCheckbox && otherCheckbox.checked) {
+                    otherCheckbox.checked = false;
+                    const otherCategoryId = id.replace('checkbox-center-', 'category-');
+                    const otherCategory = document.getElementById(otherCategoryId);
+                    removeCentering(otherCategory);
+                }
+            }
+        });
+        // Apply centering to current
+        const categoryId = checkbox.id.replace('checkbox-center-', 'category-');
+        const category = document.getElementById(categoryId);
+        applyCentering(category);
+    } else {
+        // Remove centering
+        const categoryId = checkbox.id.replace('checkbox-center-', 'category-');
+        const category = document.getElementById(categoryId);
+        removeCentering(category);
+    }
+};
+
+const updateViewportSize = () => {
+    const output = document.getElementById('output-viewport-size');
+    if (output) {
+        output.value = `${window.innerWidth} x ${window.innerHeight}`;
+    }
+};
+
 // Wrap setup in an IIFE to avoid polluting the module scope
 (() => {
+    document.getElementById('select-viewport-fit')?.addEventListener('change', onViewportFitChange);
+
     ['range-header-top', 'range-footer-bottom'].forEach(id =>
         document.getElementById(id)?.addEventListener('input', onPositionOffsetChange));
 
     ['select-header-position', 'select-footer-position'].forEach(id =>
-        document.getElementById(id)?.addEventListener('change', onPositionChange));
+        document.getElementById(id)?.addEventListener('change', handlePositionTypeChange));
 
     ['checkbox-body-background', 'checkbox-header-background', 'checkbox-sticky-background', 'checkbox-footer-background'].forEach(id =>
         document.getElementById(id)?.addEventListener('change', onBackgroundToggle));
+
+    document.getElementById('checkbox-sticky-visibility')?.addEventListener('change', onStickyToggle);
 
     // Set initial state for the sticky checkbox
     const stickyCheckbox = document.getElementById('checkbox-sticky-background');
@@ -200,4 +307,18 @@ const onBackgroundToggle = (event) => {
         stickyCheckbox.checked = true;
         stickyCheckbox.dispatchEvent(new Event('change'));
     }
+
+    const stickyVisibilityCheckbox = document.getElementById('checkbox-sticky-visibility');
+    if (stickyVisibilityCheckbox) {
+        stickyVisibilityCheckbox.checked = true;
+        stickyVisibilityCheckbox.dispatchEvent(new Event('change'));
+    }
+
+    // Add event listeners for center checkboxes
+    ['checkbox-center-meta', 'checkbox-center-body', 'checkbox-center-header', 'checkbox-center-sticky', 'checkbox-center-footer'].forEach(id =>
+        document.getElementById(id)?.addEventListener('change', onCenterToggle));
+
+    // Update viewport size on load and resize
+    window.addEventListener('resize', updateViewportSize);
+    updateViewportSize();
 })();
