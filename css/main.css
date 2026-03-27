@@ -1,5 +1,19 @@
 .category {
-    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+    /* box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5); */
+    border: 1px;
+    border-style: groove;
+    padding: 0.5em;
+    border-color: black;
+}
+
+.category-subtitle {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 0.5em;
+}
+
+.category-title {
+    justify-content: space-between;
+    background-color: rgba(0, 0, 0, 0.2);
     padding: 0.5em;
 }
 
@@ -40,6 +54,10 @@
     flex-direction: row;
     justify-content: space-between;
     margin: 1em;
+}
+
+.hidden {
+    display: none;
 }
 
 .information {
